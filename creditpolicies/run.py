@@ -1,7 +1,7 @@
 """ Main of the policies microserver. """
 
 from flask import Flask, request
-from policies.credit import check_policies
+from creditpolicies.policies import check_policies
 
 app = Flask(__name__)
 
@@ -14,4 +14,3 @@ def run():
             return 'ACCEPT'
         else:
             return 'REJECT'+'    reasons: {}'.format(rejection_list_message)
-#            return {'policy_status':'REJECT', 'reason':rejection_list_message}

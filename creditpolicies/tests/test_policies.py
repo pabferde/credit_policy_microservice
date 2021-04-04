@@ -6,7 +6,7 @@ Test suit of policies microserver.
 
 import pytest
 from .. import run as msv
-from .. import credit
+from .. import policies as pol
 
 @pytest.fixture
 def client():
@@ -30,19 +30,19 @@ def base_request_accept(**kwargs):
     return base_request
 
 
-# Tests on credit.py
+# Tests on policies.py
 
 def test_check_policies():
     d = base_request_accept
     
     # Testing ACCEPT
-    t = credit.check_policies(d())
+    t = pol.check_policies(d())
     assert t[0]
     assert [] == t[1]
     
     # Testing REJECT
     def base_check_reject(message,**kwargs):
-        t = credit.check_policies(d(**kwargs))
+        t = pol.check_policies(d(**kwargs))
         assert not t[0]
         assert message in t[1]
 
@@ -54,11 +54,11 @@ def test_check_policies():
     
 def test_check_single_policy():
 
-    accept_test = credit.check_single_policy(False,'message')
+    accept_test = pol.check_single_policy(False,'message')
     assert not accept_test[0]
     assert accept_test[1] == ''
 
-    reject_test = credit.check_single_policy(True,'message')
+    reject_test = pol.check_single_policy(True,'message')
     assert reject_test[0]
     assert reject_test[1] == 'message'    
 
