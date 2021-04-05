@@ -143,7 +143,7 @@ if __name__ == '__main__':
     show_examples_from_module = ShowExamplesFromModule(interactive_session=True)
     if answer.lower()=='y' or answer.lower()=='yes':
         show_examples_from_module.show()
-    answer = input('Do you want to see selected examples when requesting from the microserver? (y/n) ')
+    answer = input('Do you want to see selected examples when requesting from the microservice? (y/n) ')
     show_examples_from_app = ShowExamplesFromApp()
     if answer.lower()=='y' or answer.lower()=='yes':
         show_examples_from_app.show()
