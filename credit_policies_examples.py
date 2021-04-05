@@ -50,7 +50,9 @@ class ShowExamples:
         # Showing some single-reason rejected requests
         self._print_section('Showing some single-reason rejected requests')
         self.check_request(self._base_request(customer_income=400))
+        self._continue()
         self.check_request(self._base_request(customer_income=700,customer_debt=600))
+        self._continue()
         self.check_request(self._base_request(customer_age=17))
         self._continue()
     
@@ -101,11 +103,49 @@ class ShowExamplesFromApp(ShowExamples):
         self.show_response(data)
         print('----')
 
+    def input_requests(self):
+        self._print_section("Trying your on requests")
+        request_counter = 0
+        def input_one_request(request_counter):
+            answer = input('    Do you want to try your own requests? (y/n) ')
+            print('')
+            if answer.lower()=='y' or answer.lower()=='yes':
+                data = self._default_request_accept.copy()  
+                
+                def ask_numerical_variable(message, variable, variable_type):
+                    input_value = input('    '+message)
+                    try:
+                        data[variable] = variable_type(input_value)
+                    except ValueError:
+                        print('    WARNING: input must be of type {}'.format(type(variable_type('1'))))
+                        print('             default value = {} used instead.'.format(data[variable]))
+                
+                ask = ask_numerical_variable
+                ask('Type customer_income (in EUR): ', 'customer_income', float)
+                ask('Type customer_debt (in EUR): ', 'customer_debt', float)
+                ask('Type payment_remarks_12m: ', 'payment_remarks_12m', int)
+                ask('Type payment_remarks: ', 'payment_remarks', int)
+                ask('Type customer_age: ', 'customer_age', int)
+                print('')
+                
+                self.check_request(data)
+                
+                request_counter += 1
+                if request_counter < 11:
+                    input_one_request(request_counter)
+                else:
+                    print('    Maximum number of requests per session reached. Safe exiting.\n')
+        input_one_request(request_counter)
 
 if __name__ == '__main__':
     print('\nThis script will show a few examples of responses according to credit policies.\n')
+    answer = input('Do you want to see selected examples when calling from the Python module? (y/n) ')
     show_examples_from_module = ShowExamplesFromModule(interactive_session=True)
-    show_examples_from_module.show()
+    if answer.lower()=='y' or answer.lower()=='yes':
+        show_examples_from_module.show()
+    answer = input('Do you want to see selected examples when requesting from the microserver? (y/n) ')
     show_examples_from_app = ShowExamplesFromApp()
-    show_examples_from_app.show()
+    if answer.lower()=='y' or answer.lower()=='yes':
+        show_examples_from_app.show()
+    show_examples_from_app.input_requests()
     print('End of script.\n')
