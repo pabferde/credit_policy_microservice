@@ -27,13 +27,13 @@ To run the script, call it with python:
 ```
 $ python3 credit_policies_examples.py
 ```
-It will show the response of the credit policy from a) running directly the Python module policies.py, and b) passing the POST requests to the microservice.
+It will show the response of the credit policy from a) running directly the Python module policies.py, and b) passing the POST requests to the microservice. The script allows the user to pass their own requests from the terminal, but it also contains some prepared examples.
 
 Notice that this microservice does not accept a GET request, so opening it in http://127.0.0.1:5000 in a browser will not work.
 
 ## Test
 
-To test that the code works, simply run pytest in the credit-policy-microservice folder:
+To test that the code works, simply run pytest in the credit_policy_microservice folder:
 ```
 $ pytest
 ```
