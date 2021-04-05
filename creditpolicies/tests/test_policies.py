@@ -40,17 +40,21 @@ def test_check_policies():
     assert t[0]
     assert [] == t[1]
     
-    # Testing REJECT
-    def base_check_reject(message,**kwargs):
+    # Testing REJECT if any
+    def base_check_reject_any(message_list,**kwargs):
         t = pol.check_policies(d(**kwargs))
         assert not t[0]
-        assert message in t[1]
+        for message in message_list:
+            assert message in t[1]
 
-    base_check_reject('LOW_INCOME', customer_income=499)
-    base_check_reject('HIGH_DEBT_FOR_INCOME', customer_income=1000, customer_debt=1000)
-    base_check_reject('PAYMENT_REMARKS_12M', payment_remarks_12m=1)
-    base_check_reject('PAYMENT_REMARKS', payment_remarks=2)
-    base_check_reject('UNDERAGE', customer_age=17)
+    # Testing single-reason rejections
+    base_check_reject_any(['LOW_INCOME'], customer_income=499)
+    base_check_reject_any(['HIGH_DEBT_FOR_INCOME'], customer_income=1000, customer_debt=1000)
+    base_check_reject_any(['PAYMENT_REMARKS_12M'], payment_remarks_12m=1)
+    base_check_reject_any(['PAYMENT_REMARKS'], payment_remarks=2)
+    base_check_reject_any(['UNDERAGE'], customer_age=17)
+    # Testing multiple-reason rejections
+    base_check_reject_any(['LOW_INCOME','PAYMENT_REMARKS'], customer_income=400, payment_remarks=3)
     
 def test_check_single_policy():
 
